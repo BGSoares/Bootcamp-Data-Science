@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-user = os.getenv['PG_PASSWORD']
+user = os.getenv['PG_USER']
 password = os.getenv['PG_PASSWORD']
 host = 'db-spiced-northwind.c14q8hlm6x2l.eu-central-1.rds.amazonaws.com'
 port = '5432'

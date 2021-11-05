@@ -1,21 +1,35 @@
 import tweepy
 import credentials
 import pymongo
+import json
+import logging
 
 
 class Listener(tweepy.StreamListener):
-
-    def on_data(self, raw_data): 
-
-        self.process_data(raw_data)
+    def on_data(self, data): 
+        self.process_data(data)
         return True
 
-    def process_data(self, raw_data):
-        print(raw_data)
+    def process_data(self, data):
+        
+        client = pymongo.MongoClient(host="mongodb", port=27017) # connects to mongodb container
+        db = client.twitter # connects to twitter database (on first time creates db)
+
+        tweet = json.loads(data) # inserts tweet into tweets collection (on first time creates collection)
+        db.tweets.insert_one(tweet) # uploads tweet into mongodb database, tweets collection
+
+        # prints out tweet in terminal
+        try:
+            tweet_message = tweet['text']
+            logging.critical(tweet_message) 
+        except:
+            pass
 
     def on_error(self, status_code):
         if status_code == 420:
             return False
+
+
 
 class Stream():
     def __init__(self, auth, listener):
@@ -24,10 +38,8 @@ class Stream():
     def start(self, keyword_list):
         self.stream.filter(track=keyword_list)
 
-def upload_to_mongodb(tweet):
-    client = pymongo.MongoClient('mongodb://localhost:27017/')
-    db = client.twitterdb
-    db.twitterdb_data.insert(tweet)
+
+
 
 if __name__ == "__main__":
     listener = Listener()
@@ -37,4 +49,4 @@ if __name__ == "__main__":
 
     stream = Stream(auth, listener)
 
-    upload_to_mongodb(stream.start(['bolsonaro']))
+    stream.start('qanon')

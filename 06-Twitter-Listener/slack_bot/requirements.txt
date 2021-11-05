@@ -1,0 +1,5 @@
+pyjokes
+requests
+sqlalchemy
+psycopg2-binary
+pandas
