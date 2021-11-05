@@ -3,8 +3,7 @@ from sqlalchemy import create_engine
 import psycopg2
 import time
 import logging
-
-WEBHOOK_URL = "https://hooks.slack.com/services/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"
+from webhook import WEBHOOK_URL
 
 time.sleep(5)
 
