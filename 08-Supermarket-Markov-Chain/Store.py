@@ -26,7 +26,7 @@ class Supermarket:
     def get_time(self):
         """current time in HH:MM format,
         """
-        return '{:02d}:{:02d}'.format(*divmod(self.minutes, 60))
+        return '{:02d}:{:02d}'.format(*divmod(self.minutes + 420, 60))
 
 
 
@@ -35,6 +35,18 @@ class Supermarket:
         """
         for customer in self.customers:
             print(f'{self.get_time()},{customer.name},{customer.state}')
+
+    
+    def return_customers(self):
+        """return matrix of customers 
+        """
+        current_customers = np.empty(shape=(0,3))
+
+        for customer in self.customers:
+            current_customer = np.array([[self.get_time(), customer.name, customer.state]])
+            current_customers = np.concatenate((current_customers, current_customer), axis=0)
+
+        return current_customers
 
 
     def next_minute(self):

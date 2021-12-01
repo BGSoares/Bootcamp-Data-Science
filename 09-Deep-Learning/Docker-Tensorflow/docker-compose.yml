@@ -1,0 +1,10 @@
+version: '3'
+services:
+
+  jupyter:
+    image: tensorflow/tensorflow:nightly-jupyter
+    volumes:
+      - ./:/tf/shared/
+      - ./var/:/.config/
+    ports:
+      - "8888:8888"

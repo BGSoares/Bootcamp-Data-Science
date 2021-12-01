@@ -1,0 +1,11 @@
+{
+
+'research_question':'How do Americans feel about Pfizer, J&J and Moderna after COVID-19 vaccines? If vaccines improve reputation, pharmaceutical company executives can justify the decision to not profit from vaccines financially.',
+
+'hashtags':['#Moderna','#Pfizer','#Sinopharm','#Sinovac','#AstraZeneca','#Covaxin','#Sputnik V.'],
+
+'kaggle_link':'https://www.kaggle.com/gpreda/all-covid19-vaccines-tweets',
+
+'tech_stack':['docker','aws_ads','aws_ec2','mongodb','rnn','transfer_learning','tweepy']
+
+}
