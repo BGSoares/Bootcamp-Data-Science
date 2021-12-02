@@ -1,0 +1,24 @@
+
+{
+    "action":[
+        "Die Hard",
+        "Bruised",
+        "Red Notice",
+        "John Wick"
+    ],
+    "romance":[
+        "Titanic",
+        "Love Hard",
+        "The Notebook"
+    ],
+    "comedy":[
+        "Bad Santa",
+        "Kevin Alone at Home",
+        "Christmas Princess IV"
+    ],
+    "drama":[
+        "Into the Wild",
+        "The Other Son",
+        "The Shawshank Redemption"
+    ]
+}
