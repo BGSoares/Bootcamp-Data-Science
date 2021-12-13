@@ -1,0 +1,5 @@
+pymongo
+dnspython
+sqlalchemy
+psycopg2-binary
+vaderSentiment

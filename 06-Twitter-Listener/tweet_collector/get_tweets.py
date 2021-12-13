@@ -1,5 +1,6 @@
+
 import tweepy
-import credentials
+from credentials import API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 import pymongo
 import json
 import logging
@@ -44,9 +45,10 @@ class Stream():
 if __name__ == "__main__":
     listener = Listener()
     
-    auth = tweepy.OAuthHandler(credentials.API_KEY, credentials.API_SECRET)
-    auth.set_access_token(credentials.ACCESS_TOKEN, credentials.ACCESS_TOKEN_SECRET)
+    auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
     stream = Stream(auth, listener)
 
     stream.start('qanon')
+    

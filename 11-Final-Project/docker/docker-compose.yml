@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+
+  streamer:
+    build: streamer/
+    container_name: fp_streamer
+    volumes:
+    - ./streamer/:/app
+    depends_on:
+    - mongodb
+
+  mongodb:
+    image: mongo:3.6.3
+    container_name: fp_mongodb
+    ports:
+    - 27017:27017
+    volumes:
+    - ./data/mongodb:/data/db
+
+  etl:
+    build: etl/
+    container_name: fp_etl
+    volumes:
+    - ./etl/:/app
+    depends_on:
+      - postgresdb
+      - mongodb
+
+  postgresdb:
+    image: postgres:14
+    container_name: fp_postgresdb
+    ports:
+    - 5432:5432
+    volumes:
+    - ./data/postgresdb:/data/db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=twt

@@ -7,8 +7,8 @@ app = Flask("Brunnos Movie Recommender")
 
 # connects the URL "/" to the function hello()
 @app.route("/") # < - - a URL for a web page
-def hello_world():
-    return render_template("hello.html")
+def index_page():
+    return render_template("index.html")
 
 
 @app.route("/reco/")

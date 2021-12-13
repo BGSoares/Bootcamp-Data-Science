@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Brunnos Movie Recommender</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+    
+    <body>
+
+      <div class="banner">
+        <h1>Hello, World!</h1> 
+      </div>
+      
+
+      <div class="content">
+
+      <!-- image from unsplash.com -->
+      <img src="/static/titanic.jpg", width="400px">
+      <p>
+        Photo by <a href="https://unsplash.com/@kmitchhodge?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">K. Mitch Hodge</a> on <a href="https://unsplash.com/s/photos/titanic?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+      </p> 
+      
+      <p>
+      Welcome to my movie recommender.
+      This time from a HTML template.
+      </p>
+      
+      <form action="/reco/" method="GET">
+      <input name="genre"/>
+      <input type="submit" value="Show me a movie recommendation">
+      <p><i>
+        Choose genre from: action, romance, comedy or drama. By default the recommder takes comedy.
+      </i></p>
+
+    </div>
+    
+  </form>
+
+    </body>
+
+</html>
