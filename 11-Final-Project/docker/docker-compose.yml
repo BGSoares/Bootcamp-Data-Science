@@ -9,6 +9,7 @@ services:
     - ./streamer/:/app
     depends_on:
     - mongodb
+    - webapp
 
   mongodb:
     image: mongo:3.6.3
@@ -38,3 +39,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=twt
+
+  webapp:
+    build: webapp/
+    container_name: fp_webapp
+    ports:
+    - 8501:8501
+    volumes:
+    - ./webapp:/app
+    depends_on:
+      - postgresdb
