@@ -4,7 +4,7 @@ interesting datapoints for each tweet, calculating a sentiment score, and upload
 the above into a PostgreSQL DB.
 """
 
-import time
+
 from datetime import datetime as dt
 import pymongo
 from sqlalchemy import create_engine
@@ -18,16 +18,14 @@ db = client.twt
 COLLECTION = db.vac.find({})
 
 
-
 # postgres connection
 ngn = create_engine("postgresql://postgres:1234@postgresdb:5432/twt", echo=True)
 ngn.execute("""
             CREATE TABLE IF NOT EXISTS vac (
             twt_id VARCHAR(256),
-            search_kw VARCHAR(256),
             twt_dt TIMESTAMP,
             twt_text VARCHAR(500),
-            sentiment NUMERIC,
+            sentiment FLOAT,
             PRIMARY KEY (twt_id)
 );""")
 
@@ -45,14 +43,11 @@ def get_data(doc):
 
     Returns:
         twt_id (string): Tweet ID as assigned by Twitter.
-        search_kw (string): Keyword that was searched in Twitter.
         twt_ts (string): Tweet creating timestamp.
         twt_txt (string): Tweet text.
         sentiment (float): Sentiment analysis score. Vader compound score used.
     """
     twt_id = doc["id_str"]
-
-    search_kw = doc["search_kw"][0]
 
     twt_ts = dt.strftime(dt.strptime(doc["created_at"],\
         '%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%dT%H:%M:%S')
@@ -61,7 +56,7 @@ def get_data(doc):
 
     sentiment = s.polarity_scores(twt_txt)["compound"]
 
-    return (twt_id, search_kw, twt_ts, twt_txt, sentiment)
+    return (twt_id, twt_ts, twt_txt, sentiment)
 
 
 def upload_twt(doc):
@@ -75,7 +70,7 @@ def upload_twt(doc):
     """
     query = """
             INSERT INTO vac
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s)
             ON CONFLICT (twt_id)
             DO NOTHING
             ;"""
@@ -91,16 +86,17 @@ def full_upload(docs=COLLECTION):
     Returns:
         (None): Uploads MongoDB documents as rows into PostgresSQL DB. Returns nothing.
     """
-    while True:
-        for doc in docs:
-            try:
-                upload_twt(doc)
-            except KeyError:
-                continue
-        time.sleep(5)
+    for doc in docs:
+        try:
+            upload_twt(doc)
+        except KeyError:
+            print('key error')
+            continue
 
 
 
 # run etl
 if __name__ == "__main__":
-    full_upload()
+    while True:
+        COLLECTION = db.vac.find({})
+        full_upload(docs=COLLECTION)

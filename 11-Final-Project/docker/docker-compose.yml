@@ -7,9 +7,11 @@ services:
     container_name: fp_streamer
     volumes:
     - ./streamer/:/app
+    - todo:/app/todo
     depends_on:
     - mongodb
     - webapp
+    restart: 'always'
 
   mongodb:
     image: mongo:3.6.3
@@ -18,6 +20,7 @@ services:
     - 27017:27017
     volumes:
     - ./data/mongodb:/data/db
+    restart: always
 
   etl:
     build: etl/
@@ -27,6 +30,7 @@ services:
     depends_on:
       - postgresdb
       - mongodb
+    restart: 'always'
 
   postgresdb:
     image: postgres:14
@@ -39,6 +43,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=twt
+    restart: 'always'
 
   webapp:
     build: webapp/
@@ -47,5 +52,10 @@ services:
     - 8501:8501
     volumes:
     - ./webapp:/app
+    - todo:/app/todo
     depends_on:
       - postgresdb
+    restart: 'always'
+
+volumes:
+  todo:

@@ -4,18 +4,15 @@ Streamer Module
 This module returns tweets with metadata as json file and uploads to mongodb
 """
 
+import os
+import logging
 import json
-import argparse
 import tweepy
 from credentials import CONSUMER_KEY, CONSUMER_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 import pymongo
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("keywords", type=str)
-args = parser.parse_args()
-kw = args.keywords
-
+KEYWORDS = ['Pfizer','Moderna','AstraZeneca','Johnson & Johnson']
 
 class Listener(tweepy.StreamListener):
     """Listener Object
@@ -23,6 +20,10 @@ class Listener(tweepy.StreamListener):
     Args:
         StreamListener (Class): Stream class sets connection.
     """
+    def __init__(self, keyword):
+        self.keyword = keyword
+
+
     def on_data(self, data): 
         self.process_data(data)
         return True
@@ -35,7 +36,8 @@ class Listener(tweepy.StreamListener):
             data (BSON file): Twitter BSON files containint tweet info.
         """
         twt = json.loads(data) # data is inherent to tweepy class
-        twt["search_kw"] = kw
+
+        logging.critical(self.keyword)
 
         client = pymongo.MongoClient(host="mongodb", port=27017)
         db = client.twt # accesses database called twt_vac (on first call creates db)
@@ -56,7 +58,9 @@ class Stream():
         self.stream = tweepy.Stream(auth=auth, listener=listener)
 
     def start(self, keyword_list):
-        self.stream.filter(track=keyword_list, languages=["en"])
+        self.stream.filter(track=keyword_list,
+                           languages=["en"],
+                           locations=[])
 
 
 
@@ -65,7 +69,6 @@ if __name__ == "__main__":
 
     AUTH = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_KEY_SECRET)
     AUTH.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-
-    listener = Listener()
+    listener = Listener(keyword=KEYWORDS)
     stream = Stream(AUTH, listener)
-    stream.start(keyword_list=kw)
+    stream.start(keyword_list=KEYWORDS)
