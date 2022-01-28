@@ -38,14 +38,38 @@ st.header("Sentiment Meter")
 #                    AS moving_average
 #             FROM vac;
 #          """
+
          
-QUERY = """SELECT AVG(sentiment),
-                  to_timestamp(floor((extract('epoch' from twt_dt) / 600)) * 600)
-                  AT TIME ZONE 'UTC' AS t
-                  FROM vac GROUP BY t
+st.write("Graph 1: Tweet Count")
+QUERY1 = """SELECT COUNT(sentiment),
+                   to_timestamp(floor((extract('epoch' from twt_dt) / 600)) * 600)
+                   AT TIME ZONE 'UTC-1' AS t
+            FROM vac
+            GROUP BY t;
         """
-data = NGN.execute(QUERY)
-cols = data.keys()
-DATA = pd.DataFrame(data, columns=cols).set_index('t')
-# st.write(DATA)
-st.line_chart(DATA)
+data = NGN.execute(QUERY1)
+DATA1 = pd.DataFrame(data, columns=data.keys()).set_index('t')
+st.line_chart(DATA1)
+
+
+st.write("Graph 2: Sentiment Trend")
+QUERY2 = """SELECT AVG(sentiment),
+                   to_timestamp(floor((extract('epoch' from twt_dt) / 600)) * 600)
+                   AT TIME ZONE 'UTC-1' AS t
+            FROM vac GROUP BY t;
+        """
+data = NGN.execute(QUERY2)
+DATA2 = pd.DataFrame(data, columns=data.keys()).set_index('t')
+st.line_chart(DATA2)
+
+
+st.write("Sample Tweets")
+QUERY3 = """SELECT twt_text,
+                   sentiment
+            FROM vac
+            ORDER BY twt_dt DESC
+            LIMIT 5;
+        """
+data = NGN.execute(QUERY3)
+DATA3 = pd.DataFrame(data, columns=data.keys())
+st.table(DATA3)
